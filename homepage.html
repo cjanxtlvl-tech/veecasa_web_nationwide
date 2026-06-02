@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VeeCasa – Mortgages & More in Minutes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES
+    ============================================= */
+    :root {
+      --blue:       #1F66FF;
+      --navy:       #0B234A;
+      --bg-light:   #EEF4FF;
+      --white:      #FFFFFF;
+      --text:       #1B1B1B;
+      --text-muted: #6B7280;
+      --border:     #E5E7EB;
+      --shadow-sm:  0 2px 8px rgba(0,0,0,.06);
+      --shadow-md:  0 4px 24px rgba(0,0,0,.10);
+      --shadow-lg:  0 8px 40px rgba(0,0,0,.14);
+      --radius-sm:  8px;
+      --radius-md:  14px;
+      --radius-lg:  20px;
+      --radius-pill:50px;
+      --font:       'Inter', system-ui, sans-serif;
+      --transition: .22s ease;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* =============================================
+       LAYOUT HELPERS  (Elementor-friendly classes)
+    ============================================= */
+    .vc-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* =============================================
+       TOP BAR  .vc-topbar
+    ============================================= */
+    .vc-topbar {
+      background: var(--navy);
+      padding: 10px 0;
+    }
+    .vc-topbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .vc-topbar__phone {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .vc-topbar__phone svg { flex-shrink: 0; }
+    .vc-topbar__socials {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .vc-topbar__socials a {
+      color: var(--white);
+      opacity: .85;
+      transition: opacity var(--transition);
+    }
+    .vc-topbar__socials a:hover { opacity: 1; }
+
+    /* =============================================
+       NAVBAR  .vc-nav
+    ============================================= */
+    .vc-nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 8px 0;
+    }
+    .vc-nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .vc-nav__logo {
+      display: flex;
+      align-items: center;
+    }
+    /*
+      Logo crop wrapper — the PNG is a wide banner (~1320×880) with the
+      logo on the left and a building photo on the right. We scale the
+      image up and clip to the logo-only region via overflow:hidden.
+
+      Fine-tuning tips if the crop feels off:
+        • Too much whitespace above/below → adjust margin-top
+        • Building still visible on right → reduce .vc-nav__logo-crop width
+        • Logo text too small → increase .vc-nav__logo-img width value
+    */
+    .vc-nav__logo-crop {
+      width: 220px;      /* visible window — logo fits here, building is clipped */
+      height: 68px;      /* tall enough to show logo + full tagline */
+      overflow: hidden;
+      display: block;
+      flex-shrink: 0;
+    }
+    .vc-nav__logo-img {
+      width: 370px;      /* scale wider so logo text isn't cut off within the 220px window */
+      height: auto;
+      max-width: none;   /* override global img { max-width:100% } reset */
+      margin-top: -66px; /* keep aggressive shift to skip top whitespace */
+      margin-left: -10px;/* shift left to trim any left padding in the source image */
+      display: block;
+    }
+
+    /* Desktop nav links */
+    .vc-nav__links {
+      display: none;
+      align-items: center;
+      gap: 28px;
+    }
+    .vc-nav__links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      transition: color var(--transition);
+    }
+    .vc-nav__links a:hover { color: var(--blue); }
+    .vc-nav__cta {
+      display: none;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      transition: background var(--transition), transform var(--transition);
+    }
+    .vc-nav__cta:hover { background: #0f52e0; transform: translateY(-1px); }
+
+    /* Hamburger */
+    .vc-nav__burger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .vc-nav__burger span {
+      display: block;
+      width: 26px;
+      height: 2.5px;
+      background: var(--navy);
+      border-radius: 2px;
+    }
+
+    /* =============================================
+       HERO  .vc-hero
+    ============================================= */
+    .vc-hero {
+      background: linear-gradient(135deg, #dce8ff 0%, #eef4ff 50%, #f4f8ff 100%);
+      position: relative;
+      overflow: hidden;
+      /* prevent any child from causing horizontal scroll */
+      max-width: 100vw;
+    }
+    /* Side-by-side on ALL screen sizes to match screenshot */
+    .vc-hero__inner {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      position: relative;
+      z-index: 2;
+      min-height: 280px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Content side */
+    .vc-hero__content {
+      flex: 0 0 55%;
+      padding: 20px 12px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 3;
+    }
+    .vc-hero__headline {
+      font-size: clamp(30px, 8.5vw, 64px);
+      font-weight: 900;
+      line-height: 1.06;
+      color: var(--navy);
+      letter-spacing: -1.5px;
+      margin-bottom: 6px;
+    }
+    .vc-hero__headline .highlight { color: var(--blue); }
+    .vc-hero__desc {
+      font-size: clamp(11px, 2.8vw, 14px);
+      line-height: 1.65;
+      color: #374151;
+      margin-bottom: 10px;
+      max-width: 340px;
+    }
+    .vc-hero__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .vc-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--blue);
+      color: var(--white);
+      font-size: clamp(11px, 2.8vw, 14px);
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      width: fit-content;
+      max-width: 260px;
+    }
+    .vc-btn-primary:hover {
+      background: #0f52e0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(31,102,255,.35);
+    }
+    .vc-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--white);
+      color: var(--blue);
+      font-size: clamp(11px, 2.8vw, 14px);
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--blue);
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      width: fit-content;
+      max-width: 260px;
+    }
+    .vc-btn-secondary:hover {
+      background: #EBF0FF;
+      transform: translateY(-2px);
+    }
+
+    /* Image side */
+    .vc-hero__image-wrap {
+      flex: 0 0 45%;
+      max-width: 45%;
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+    }
+    .vc-hero__image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: right top;
+    }
+    /* Gradient fades left edge of image into hero bg */
+    .vc-hero__image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, #dce8ff 0%, rgba(220,232,255,0.5) 22%, transparent 55%);
+    }
+
+    /* =============================================
+       TRUST BAR  .vc-trust
+    ============================================= */
+    .vc-trust {
+      padding: 0 20px 16px;
+      margin-top: -28px;
+      position: relative;
+      z-index: 10;
+    }
+    .vc-trust__card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 16px;
+    }
+    .vc-trust__item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+    }
+    .vc-trust__icon {
+      width: 48px;
+      height: 48px;
+      background: #EBF0FF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .vc-trust__icon svg { color: var(--blue); }
+    .vc-trust__num {
+      font-size: clamp(20px, 5vw, 28px);
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1;
+    }
+    .vc-trust__label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .vc-trust__divider {
+      width: 1px;
+      height: 48px;
+      background: var(--border);
+    }
+
+    /* =============================================
+       SERVICES  .vc-services
+    ============================================= */
+    .vc-services {
+      padding: 16px 0 12px;
+      text-align: center;
+    }
+    .vc-section-heading {
+      font-size: clamp(14px, 3.5vw, 20px);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .vc-services__grid {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+    .vc-service-item {
+      flex: 1 1 0;
+      max-width: 110px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      border-radius: var(--radius-md);
+      transition: background var(--transition), transform var(--transition);
+      cursor: pointer;
+    }
+    .vc-service-item:hover {
+      background: var(--bg-light);
+      transform: translateY(-4px);
+    }
+    .vc-service-item__icon {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vc-service-item__title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .vc-service-item__desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    /* =============================================
+       SHOWCASE  .vc-showcase — continuous marquee carousel
+    ============================================= */
+    .vc-showcase {
+      padding: 2px 0 16px;
+      overflow: hidden;
+    }
+    .vc-showcase__caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      color: #9CA3AF;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      padding: 0 20px;
+    }
+    .vc-showcase__mask {
+      position: relative;
+      overflow: hidden;
+    }
+    .vc-showcase__mask::before,
+    .vc-showcase__mask::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 60px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .vc-showcase__mask::before {
+      left: 0;
+      background: linear-gradient(to right, var(--white), transparent);
+    }
+    .vc-showcase__mask::after {
+      right: 0;
+      background: linear-gradient(to left, var(--white), transparent);
+    }
+    .vc-showcase__track {
+      display: flex;
+      gap: 12px;
+      animation: vc-marquee 42s linear infinite;
+      will-change: transform;
+      width: max-content;
+      padding: 8px 0 16px;
+    }
+    .vc-showcase__track:hover      { animation-play-state: paused; }
+    .vc-showcase__track.is-touching { animation-play-state: paused; }
+    @keyframes vc-marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .vc-showcase__track { animation-play-state: paused; }
+    }
+
+    /* Property listing card */
+    .vc-card {
+      width: 130px;
+      flex-shrink: 0;
+      border-radius: var(--radius-md);
+      background: var(--white);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+      user-select: none;
+    }
+    .vc-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .vc-card__img-wrap {
+      position: relative;
+      width: 100%;
+      height: 80px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0B234A, #1F66FF); /* fallback if img missing */
+    }
+    .vc-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .vc-card__badge {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      background: rgba(255,255,255,0.93);
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 20px;
+    }
+    .vc-card__body { padding: 7px 8px 6px; }
+    .vc-card__title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+    .vc-card__location {
+      font-size: 8px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .vc-card__desc {
+      font-size: 9px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .vc-card__arrow { display: flex; justify-content: flex-end; }
+    .vc-card__arrow span {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      transition: background var(--transition), color var(--transition);
+    }
+    .vc-card:hover .vc-card__arrow span {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    /* =============================================
+       BENEFITS  .vc-benefits
+    ============================================= */
+    .vc-benefits {
+      background: #EBF0FF;
+      padding: 16px 0;
+      text-align: center;
+    }
+    .vc-benefits__heading {
+      font-size: clamp(14px, 4vw, 22px);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+    .vc-benefits__heading .highlight { color: var(--blue); }
+    .vc-benefits__grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: nowrap;
+    }
+    /* Inline icon + text layout matching screenshot */
+    .vc-benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      flex: 1 1 0;
+      max-width: 200px;
+      text-align: left;
+    }
+    .vc-benefit-item__icon {
+      width: 26px;
+      height: 26px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .vc-benefit-item__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+    .vc-benefit-item__sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       FOOTER STRIP  .vc-footer
+    ============================================= */
+    .vc-footer {
+      background: var(--navy);
+      padding: 10px 0;
+      text-align: center;
+    }
+    .vc-footer p {
+      color: rgba(255,255,255,.55);
+      font-size: 13px;
+    }
+    .vc-footer a { color: rgba(255,255,255,.7); }
+    .vc-footer a:hover { color: var(--white); }
+
+    /* =============================================
+       RESPONSIVE — TABLET  (≥ 640px)
+    ============================================= */
+    @media (min-width: 640px) {
+      .vc-hero__actions { flex-direction: row; flex-wrap: wrap; }
+      .vc-trust__card { padding: 32px 40px; }
+    }
+
+    /* =============================================
+       RESPONSIVE — DESKTOP  (≥ 960px)
+    ============================================= */
+    @media (min-width: 960px) {
+      .vc-nav__burger { display: none; }
+      .vc-nav__links { display: flex; }
+      .vc-nav__cta { display: inline-flex; }
+
+      /* Hero: wider on desktop */
+      .vc-hero { min-height: 600px; }
+      .vc-hero__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .vc-hero__content {
+        padding: 80px 40px 80px 0;
+      }
+      .vc-hero__image-wrap {
+        border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      }
+      .vc-hero__image-overlay {
+        background: linear-gradient(to right, #dce8ff 0%, rgba(220,232,255,.5) 25%, transparent 60%);
+      }
+
+      /* Trust bar floats below hero, centred */
+      .vc-trust {
+        max-width: 680px;
+        margin: -40px auto 0;
+      }
+
+      /* Services wider grid */
+      .vc-services__grid { flex-wrap: nowrap; gap: 32px; }
+      .vc-service-item { max-width: 280px; }
+
+      /* Showcase cards wider */
+      /* showcase track padding on desktop */
+      .vc-showcase__track { padding: 8px 0 16px; }
+
+      /* Benefits 3-col */
+      .vc-benefits__grid { flex-wrap: nowrap; gap: 32px; }
+    }
+
+    /* scroll hint removed — carousel is always visible */
+
+    /* =============================================
+       MOBILE-ONLY: fit everything on one screen
+       Targets 375×812 viewport
+    ============================================= */
+    @media (max-width: 639px) {
+      /* Topbar */
+      .vc-topbar { padding: 4px 0; font-size: 11px; }
+      .vc-topbar__phone { font-size: 11px; gap: 4px; }
+      .vc-topbar__socials a svg { width: 14px; height: 14px; }
+
+      /* Nav */
+      .vc-nav { padding: 6px 0; }
+      .vc-nav__logo-crop { width: 180px; height: 56px; }
+      .vc-nav__logo-img { width: 300px; margin-top: -56px; }
+
+      /* Hero */
+      .vc-hero__inner { min-height: 220px; }
+      .vc-hero__content { padding: 14px 12px 14px 14px; }
+      .vc-hero__headline {
+        font-size: 26px !important;
+        line-height: 1.05;
+        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+      }
+      .vc-hero__desc {
+        font-size: 11px !important;
+        line-height: 1.5;
+        margin-bottom: 10px;
+      }
+      .vc-hero__actions { gap: 6px; }
+      .vc-btn-primary {
+        font-size: 12px !important;
+        padding: 9px 16px !important;
+      }
+      .vc-btn-secondary {
+        font-size: 12px !important;
+        padding: 8px 14px !important;
+      }
+      .vc-hero__image-wrap { min-height: 200px; }
+
+      /* Trust bar */
+      .vc-trust { padding: 0 12px 10px; }
+      .vc-trust__card {
+        padding: 10px 14px !important;
+        margin: -20px 12px 0;
+        border-radius: 12px;
+        gap: 8px;
+      }
+      .vc-trust__num { font-size: 20px !important; }
+      .vc-trust__label { font-size: 10px; }
+      .vc-trust__icon svg { width: 18px; height: 18px; }
+      .vc-trust__divider { height: 30px; }
+
+      /* Services */
+      .vc-services { padding: 12px 0 8px; }
+      .vc-section-heading { font-size: 14px !important; margin-bottom: 10px !important; }
+      .vc-services__grid { gap: 4px; padding: 0 8px; }
+      .vc-service-item { padding: 6px 4px; gap: 4px; max-width: 33%; }
+      .vc-service-item__icon { width: 32px; height: 32px; }
+      .vc-service-item__icon svg { width: 18px; height: 18px; }
+      .vc-service-item__title { font-size: 10px; }
+      .vc-service-item__desc { font-size: 9px; line-height: 1.3; }
+
+      /* Showcase */
+      .vc-showcase { padding: 4px 0 10px; }
+      .vc-showcase__caption { margin-bottom: 4px; font-size: 10px; }
+      .vc-card { width: 110px; }
+      .vc-card__img-wrap { height: 70px; }
+      .vc-card__badge { font-size: 8px; padding: 2px 5px; }
+      .vc-card__body { padding: 5px 6px 4px; }
+      .vc-card__title { font-size: 10px; }
+      .vc-card__location { font-size: 8px; }
+      .vc-card__desc { font-size: 9px; margin-bottom: 4px; }
+      .vc-card__arrow span { width: 14px; height: 14px; }
+      .vc-showcase__track { gap: 8px; }
+
+      /* Benefits */
+      .vc-benefits { padding: 10px 0; }
+      .vc-benefits__heading { font-size: 14px !important; margin-bottom: 10px !important; }
+      .vc-benefits__grid { gap: 4px; padding: 0 12px; flex-wrap: nowrap; }
+      .vc-benefit-item { gap: 6px; max-width: none; }
+      .vc-benefit-item__icon { width: 22px; height: 22px; flex-shrink: 0; }
+      .vc-benefit-item__icon svg { width: 12px; height: 12px; }
+      .vc-benefit-item__title { font-size: 12px; }
+      .vc-benefit-item__sub { font-size: 10px; }
+
+      /* Footer */
+      .vc-footer { padding: 8px 0; }
+      .vc-footer p { font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================
+     TOP BAR
+================================================= -->
+<div class="vc-topbar elementor-section" role="banner">
+  <div class="vc-container vc-topbar__inner">
+    <a href="tel:+17323141874" class="vc-topbar__phone" aria-label="Call VeeCasa">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.07 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/>
+      </svg>
+      +1 (732) 314-1874
+    </a>
+    <nav class="vc-topbar__socials" aria-label="Social media links">
+      <!-- Instagram -->
+      <a href="#" aria-label="Instagram">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+      </a>
+      <!-- Facebook -->
+      <a href="#" aria-label="Facebook">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+        </svg>
+      </a>
+      <!-- TikTok -->
+      <a href="#" aria-label="TikTok">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
+        </svg>
+      </a>
+      <!-- X / Twitter -->
+      <a href="#" aria-label="X (Twitter)">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+      <!-- YouTube -->
+      <a href="#" aria-label="YouTube">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/>
+          <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0B234A"/>
+        </svg>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- ================================================
+     NAVIGATION
+================================================= -->
+<header class="vc-nav elementor-section" role="navigation" aria-label="Main navigation">
+  <div class="vc-container vc-nav__inner">
+    <!-- Logo -->
+    <a href="/" class="vc-nav__logo" aria-label="VeeCasa home">
+      <!--
+        Logo crop wrapper: clips the wide banner PNG to the logo-only area.
+        REPLACE path if your filename differs:
+          images/veecasa-logo.png  →  your actual logo filename
+        onerror fallback tries images/logo.png if the primary path is missing.
+      -->
+      <div class="vc-nav__logo-crop">
+        <img
+          class="vc-nav__logo-img"
+          src="images/veecasa-logo.png"
+          alt="VeeCasa – Find. Buy. Make. Home."
+          width="1320"
+          height="880"
+          onerror="this.src='images/logo.png'"
+        />
+      </div>
+    </a>
+
+    <!-- Desktop links -->
+    <nav class="vc-nav__links" aria-label="Primary">
+      <a href="#">Home Loans</a>
+      <a href="#">Refinance</a>
+      <a href="#">Invest</a>
+      <a href="#">Find a Home</a>
+      <a href="#">Resources</a>
+    </nav>
+
+    <a href="#" class="vc-nav__cta">Get Started</a>
+
+    <!-- Mobile hamburger -->
+    <button class="vc-nav__burger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ================================================
+     HERO SECTION  .vc-hero
+================================================= -->
+<section class="vc-hero elementor-section" aria-labelledby="hero-headline">
+  <div class="vc-hero__inner">
+    <!-- Left: copy -->
+    <div class="vc-hero__content">
+      <h1 class="vc-hero__headline" id="hero-headline">
+        Mortgages<br>
+        &amp; <span class="highlight">More</span><br>
+        in Minutes.
+      </h1>
+      <p class="vc-hero__desc">
+        Compare loan options from 300+ verified lenders, explore opportunities for your next home, project, or investment, and discover financing solutions tailored to your goals.
+      </p>
+      <div class="vc-hero__actions">
+        <a href="#" class="vc-btn-primary" role="button">
+          Start Comparing Options
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="tel:+17323141874" class="vc-btn-secondary" role="button">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.07 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+          Talk to a Loan Expert
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: image -->
+    <div class="vc-hero__image-wrap">
+      <!--
+        Hero lifestyle photo — REPLACE path if your filename differs.
+        REPLACE: images/family.png  →  your actual hero image filename
+      -->
+      <img
+        src="images/family.png"
+        alt="Happy family receiving house keys in front of their new home"
+        loading="eager"
+        width="900"
+        height="600"
+      />
+      <div class="vc-hero__image-overlay" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     TRUST BAR  .vc-trust
+================================================= -->
+<div class="vc-trust elementor-section" aria-label="Trust statistics">
+  <div class="vc-trust__card">
+    <!-- Stat 1 -->
+    <div class="vc-trust__item">
+      <div class="vc-trust__icon" aria-hidden="true">
+        <svg width="24" height="24" fill="none" stroke="#1F66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+      </div>
+      <div>
+        <div class="vc-trust__num">50,000+</div>
+        <div class="vc-trust__label">Homebuyers Served</div>
+      </div>
+    </div>
+
+    <div class="vc-trust__divider" aria-hidden="true"></div>
+
+    <!-- Stat 2 -->
+    <div class="vc-trust__item">
+      <div class="vc-trust__icon" aria-hidden="true">
+        <svg width="24" height="24" fill="none" stroke="#1F66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+      </div>
+      <div>
+        <div class="vc-trust__num">300+</div>
+        <div class="vc-trust__label">Verified Lenders</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     SERVICES  .vc-services
+================================================= -->
+<section class="vc-services elementor-section" aria-labelledby="services-heading">
+  <div class="vc-container">
+    <h2 class="vc-section-heading" id="services-heading">We help you achieve homeownership</h2>
+    <div class="vc-services__grid" role="list">
+
+      <!-- Buy a Home -->
+      <div class="vc-service-item" role="listitem">
+        <div class="vc-service-item__icon" aria-hidden="true">
+          <svg width="28" height="28" fill="none" stroke="#1F66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="vc-service-item__title">Buy a Home</div>
+        <div class="vc-service-item__desc">Find the right loan for your new home.</div>
+      </div>
+
+      <!-- Refinance -->
+      <div class="vc-service-item" role="listitem">
+        <div class="vc-service-item__icon" aria-hidden="true">
+          <svg width="28" height="28" fill="none" stroke="#1F66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="vc-service-item__title">Refinance</div>
+        <div class="vc-service-item__desc">Lower your rate and monthly payment.</div>
+      </div>
+
+      <!-- Invest -->
+      <div class="vc-service-item" role="listitem">
+        <div class="vc-service-item__icon" aria-hidden="true">
+          <svg width="28" height="28" fill="none" stroke="#1F66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <div class="vc-service-item__title">Invest</div>
+        <div class="vc-service-item__desc">Finance your next real estate investment.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     OPPORTUNITY SHOWCASE  .vc-showcase
+     Continuous marquee carousel — subtly supports mortgage-first messaging
+================================================= -->
+<section class="vc-showcase elementor-section" aria-labelledby="showcase-caption">
+
+  <!-- Small muted caption — low visual emphasis intentional -->
+  <p class="vc-showcase__caption" id="showcase-caption">Explore what's possible</p>
+
+  <!-- Edge-fade mask -->
+  <div class="vc-showcase__mask" aria-label="Opportunity carousel" role="region">
+    <!--
+      Track contains SET 1 + SET 2 (identical). CSS translateX(-50%) creates seamless loop.
+      property_*_upscaled.webp — adjust filenames below if yours differ.
+    -->
+    <div class="vc-showcase__track" id="vc-carousel-track">
+
+      <!-- ============================================================
+           SET 1  (9 cards using property_*_upscaled.webp)
+           REPLACE filenames below if yours differ from property_X_Y_upscaled.webp
+      ============================================================= -->
+
+      <!-- Card 1 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_1_1_upscaled.webp" alt="Single family home" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Single Family</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Explore Homes</div>
+          <div class="vc-card__location">Neighborhoods &amp; resources</div>
+          <div class="vc-card__desc">Buyer resources &amp; financing options.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_1_2_upscaled.webp" alt="Home renovation project" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Renovation</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Fund a Project</div>
+          <div class="vc-card__location">Construction &amp; Fix &amp; Flip</div>
+          <div class="vc-card__desc">Renovation or fix &amp; flip financing.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_1_3_upscaled.webp" alt="Investment property" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Investor</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Grow an Investment</div>
+          <div class="vc-card__location">DSCR &amp; hard money loans</div>
+          <div class="vc-card__desc">Rental property loan options.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_2_1_upscaled.webp" alt="Suburban neighborhood home" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Single Family</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Find Your Home</div>
+          <div class="vc-card__location">Suburban communities</div>
+          <div class="vc-card__desc">Compare purchase loan options.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_2_2_upscaled.webp" alt="Refinance your home" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Refinance</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Lower Your Rate</div>
+          <div class="vc-card__location">Rate &amp; term refinance</div>
+          <div class="vc-card__desc">300+ lenders competing for you.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_2_3_upscaled.webp" alt="Multifamily investment property" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Multifamily</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Invest &amp; Scale</div>
+          <div class="vc-card__location">2–4 unit &amp; apartment</div>
+          <div class="vc-card__desc">Investor-friendly loan programs.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 7 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_3_1_upscaled.webp" alt="New construction home" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Construction</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">New Build Loan</div>
+          <div class="vc-card__location">Ground-up construction</div>
+          <div class="vc-card__desc">Finance your build from day one.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 8 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_3_2_upscaled.webp" alt="Fix and flip property" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">Fix &amp; Flip</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Flip a Property</div>
+          <div class="vc-card__location">Short-term bridge loans</div>
+          <div class="vc-card__desc">Hard money &amp; bridge financing.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- Card 9 -->
+      <article class="vc-card">
+        <div class="vc-card__img-wrap">
+          <img class="vc-card__img" src="images/property_3_3_upscaled.webp" alt="Rental income property" loading="lazy"
+               onerror="this.style.display='none'"/>
+          <span class="vc-card__badge">DSCR Loan</span>
+        </div>
+        <div class="vc-card__body">
+          <div class="vc-card__title">Rental Income</div>
+          <div class="vc-card__location">Qualify on rent, not W-2</div>
+          <div class="vc-card__desc">DSCR loans for landlords &amp; investors.</div>
+          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+        </div>
+      </article>
+
+      <!-- ============================================================
+           SET 2  (exact duplicate for seamless loop — aria-hidden)
+      ============================================================= -->
+
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_1_1_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Single Family</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Explore Homes</div><div class="vc-card__location">Neighborhoods &amp; resources</div><div class="vc-card__desc">Buyer resources &amp; financing options.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_1_2_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Renovation</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Fund a Project</div><div class="vc-card__location">Construction &amp; Fix &amp; Flip</div><div class="vc-card__desc">Renovation or fix &amp; flip financing.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_1_3_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Investor</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Grow an Investment</div><div class="vc-card__location">DSCR &amp; hard money loans</div><div class="vc-card__desc">Rental property loan options.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_2_1_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Single Family</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Find Your Home</div><div class="vc-card__location">Suburban communities</div><div class="vc-card__desc">Compare purchase loan options.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_2_2_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Refinance</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Lower Your Rate</div><div class="vc-card__location">Rate &amp; term refinance</div><div class="vc-card__desc">300+ lenders competing for you.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_2_3_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Multifamily</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Invest &amp; Scale</div><div class="vc-card__location">2–4 unit &amp; apartment</div><div class="vc-card__desc">Investor-friendly loan programs.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_3_1_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Construction</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">New Build Loan</div><div class="vc-card__location">Ground-up construction</div><div class="vc-card__desc">Finance your build from day one.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_3_2_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Fix &amp; Flip</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Flip a Property</div><div class="vc-card__location">Short-term bridge loans</div><div class="vc-card__desc">Hard money &amp; bridge financing.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+      <article class="vc-card" aria-hidden="true">
+        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_3_3_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">DSCR Loan</span></div>
+        <div class="vc-card__body"><div class="vc-card__title">Rental Income</div><div class="vc-card__location">Qualify on rent, not W-2</div><div class="vc-card__desc">DSCR loans for landlords &amp; investors.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
+      </article>
+
+    </div><!-- /.vc-showcase__track -->
+  </div><!-- /.vc-showcase__mask -->
+
+</section>
+
+<!-- ================================================
+     BENEFITS  .vc-benefits
+================================================= -->
+<section class="vc-benefits elementor-section" aria-labelledby="benefits-heading">
+  <div class="vc-container">
+    <h2 class="vc-benefits__heading" id="benefits-heading">
+      A <span class="highlight">better</span> way to get a mortgage
+    </h2>
+    <div class="vc-benefits__grid" role="list">
+
+      <!-- Compare -->
+      <div class="vc-benefit-item" role="listitem">
+        <div class="vc-benefit-item__icon" aria-hidden="true">
+          <svg width="18" height="18" fill="none" stroke="#1F66FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="vc-benefit-item__title">Compare</div>
+          <div class="vc-benefit-item__sub">300+ lenders</div>
+        </div>
+      </div>
+
+      <!-- Customize -->
+      <div class="vc-benefit-item" role="listitem">
+        <div class="vc-benefit-item__icon" aria-hidden="true">
+          <svg width="18" height="18" fill="none" stroke="#1F66FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="vc-benefit-item__title">Customize</div>
+          <div class="vc-benefit-item__sub">your options</div>
+        </div>
+      </div>
+
+      <!-- Close -->
+      <div class="vc-benefit-item" role="listitem">
+        <div class="vc-benefit-item__icon" aria-hidden="true">
+          <svg width="18" height="18" fill="none" stroke="#1F66FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="vc-benefit-item__title">Close</div>
+          <div class="vc-benefit-item__sub">with confidence</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     FOOTER STRIP
+================================================= -->
+<footer class="vc-footer elementor-section" role="contentinfo">
+  <div class="vc-container">
+    <p>&copy; 2024 VeeCasa. All rights reserved. |
+      <a href="#">Privacy Policy</a> |
+      <a href="#">Terms of Service</a> |
+      <a href="#">NMLS #XXXXXXX</a>
+    </p>
+    <p style="margin-top:8px; font-size:11px; color:rgba(255,255,255,.35);">
+      VeeCasa is a mortgage marketplace. Equal Housing Lender. Not a commitment to lend.
+    </p>
+  </div>
+</footer>
+
+<!-- ================================================
+     JAVASCRIPT
+================================================= -->
+<script>
+(function () {
+  'use strict';
+
+  /* --------------------------------------------------
+     Mobile hamburger menu (no-op toggle; wire to your
+     actual Elementor or WP menu)
+  -------------------------------------------------- */
+  const burger = document.querySelector('.vc-nav__burger');
+  if (burger) {
+    burger.addEventListener('click', function () {
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', String(!expanded));
+    });
+  }
+
+  /* --------------------------------------------------
+     Carousel: pause on touch (mobile swipe-friendly)
+     CSS animation handles the movement; JS only pauses
+     it while the user's finger is down.
+  -------------------------------------------------- */
+  const carouselTrack = document.getElementById('vc-carousel-track');
+  if (carouselTrack) {
+    carouselTrack.addEventListener('touchstart', function () {
+      this.classList.add('is-touching');
+    }, { passive: true });
+    carouselTrack.addEventListener('touchend', function () {
+      this.classList.remove('is-touching');
+    }, { passive: true });
+
+    /* Respect prefers-reduced-motion */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      carouselTrack.style.animationDuration = '0s';
+      carouselTrack.style.animationPlayState = 'paused';
+    }
+  }
+
+  /* --------------------------------------------------
+     Intersection Observer: fade-in on scroll
+  -------------------------------------------------- */
+  if ('IntersectionObserver' in window) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .vc-fade { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+      .vc-fade.is-visible { opacity: 1; transform: none; }
+    `;
+    document.head.appendChild(style);
+
+    const targets = document.querySelectorAll(
+      '.vc-service-item, .vc-benefit-card, .vc-trust__item'
+    );
+    targets.forEach(function (el) { el.classList.add('vc-fade'); });
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    targets.forEach(function (el) { observer.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

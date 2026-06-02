@@ -1,0 +1,264 @@
+/*
+ * VeeCasa – Elementor Custom CSS
+ * ================================
+ * Paste each block into the appropriate Elementor container's
+ * Advanced → Custom CSS panel, OR enqueue this file as a
+ * WordPress child-theme stylesheet.
+ *
+ * CSS Classes to assign in Elementor Advanced → CSS Classes:
+ *   Top Bar container  →  vc-topbar
+ *   Nav container      →  vc-nav
+ *   Hero container     →  vc-hero
+ *   Trust bar div      →  vc-trust
+ *   Services section   →  vc-services
+ *   Showcase section   →  vc-showcase
+ *   Benefits section   →  vc-benefits
+ */
+
+/* ===================================================
+   GLOBAL TOKEN OVERRIDES
+   (place in Elementor Site Settings → Custom CSS)
+=================================================== */
+:root {
+  --vc-blue:       #1F66FF;
+  --vc-navy:       #0B234A;
+  --vc-bg-light:   #F8FAFD;
+  --vc-white:      #FFFFFF;
+  --vc-text:       #1B1B1B;
+  --vc-muted:      #6B7280;
+  --vc-border:     #E5E7EB;
+  --vc-shadow-sm:  0 2px 8px rgba(0,0,0,.06);
+  --vc-shadow-md:  0 4px 24px rgba(0,0,0,.10);
+  --vc-shadow-lg:  0 8px 40px rgba(0,0,0,.14);
+  --vc-radius-pill:50px;
+}
+
+/* Elementor resets interference with font */
+.elementor-section, .e-container {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ===================================================
+   TOP BAR  (assign class: vc-topbar)
+=================================================== */
+.vc-topbar {
+  background: var(--vc-navy) !important;
+  padding: 10px 0 !important;
+}
+.vc-topbar .elementor-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===================================================
+   HERO SECTION  (assign class: vc-hero)
+=================================================== */
+.vc-hero {
+  background: var(--vc-bg-light) !important;
+  overflow: hidden;
+}
+
+/* Headline highlight word */
+.vc-hero__headline .highlight { color: var(--vc-blue); }
+
+/* Primary CTA button */
+.vc-btn-primary {
+  background: var(--vc-blue);
+  color: #fff;
+  border-radius: var(--vc-radius-pill);
+  padding: 16px 32px;
+  font-weight: 700;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid transparent;
+  transition: background .22s ease, transform .22s ease, box-shadow .22s ease;
+}
+.vc-btn-primary:hover {
+  background: #0f52e0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(31,102,255,.35);
+}
+
+/* Secondary CTA button */
+.vc-btn-secondary {
+  background: var(--vc-white);
+  color: var(--vc-blue);
+  border: 2px solid var(--vc-blue);
+  border-radius: var(--vc-radius-pill);
+  padding: 14px 30px;
+  font-weight: 600;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .22s ease, transform .22s ease;
+}
+.vc-btn-secondary:hover {
+  background: #EBF0FF;
+  transform: translateY(-2px);
+}
+
+/* Hero image gradient overlay */
+.vc-hero__image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--vc-bg-light) 0%, rgba(248,250,253,.5) 35%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ===================================================
+   TRUST BAR  (assign class: vc-trust)
+=================================================== */
+.vc-trust {
+  position: relative;
+  z-index: 10;
+  margin-top: -40px !important;
+  padding: 0 20px !important;
+}
+.vc-trust__card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.14);
+  padding: 28px 24px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 16px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.vc-trust__num {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--vc-blue);
+  line-height: 1;
+}
+.vc-trust__label {
+  font-size: 13px;
+  color: var(--vc-muted);
+  margin-top: 3px;
+}
+
+/* ===================================================
+   SERVICES  (assign class: vc-services)
+=================================================== */
+.vc-services {
+  padding: 60px 0 48px !important;
+  text-align: center;
+}
+.vc-service-item__icon {
+  width: 64px;
+  height: 64px;
+  border: 2px solid var(--vc-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+.vc-service-item__title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--vc-navy);
+}
+.vc-service-item:hover {
+  background: var(--vc-bg-light);
+  border-radius: 14px;
+  transform: translateY(-4px);
+}
+
+/* ===================================================
+   SHOWCASE  (assign class: vc-showcase)
+=================================================== */
+.vc-showcase {
+  padding: 8px 0 56px !important;
+}
+.vc-showcase__caption {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9CA3AF;
+  letter-spacing: .5px;
+  margin-bottom: 20px;
+}
+.vc-showcase__track-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 8px 20px 16px;
+  cursor: grab;
+}
+.vc-showcase__track-wrap::-webkit-scrollbar { display: none; }
+.vc-showcase-card {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,.10);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.vc-showcase-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 40px rgba(0,0,0,.14);
+}
+.vc-showcase-card__title { color: var(--vc-blue); font-weight: 700; }
+
+/* ===================================================
+   BENEFITS  (assign class: vc-benefits)
+=================================================== */
+.vc-benefits {
+  background: #EBF0FF !important;
+  padding: 60px 0 !important;
+  text-align: center;
+}
+.vc-benefits__heading .highlight { color: var(--vc-blue); }
+.vc-benefit-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  padding: 28px 24px;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.vc-benefit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 24px rgba(0,0,0,.10);
+}
+.vc-benefit-card__icon {
+  width: 44px;
+  height: 44px;
+  background: #EBF0FF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+.vc-benefit-card__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--vc-blue);
+}
+.vc-benefit-card__sub {
+  font-size: 14px;
+  color: var(--vc-muted);
+}
+
+/* ===================================================
+   RESPONSIVE HELPERS
+=================================================== */
+@media (max-width: 767px) {
+  .vc-trust__card { flex-direction: column; gap: 24px; }
+  .vc-trust__divider { width: 48px; height: 1px; }
+  .vc-hero__image-overlay {
+    background: linear-gradient(to bottom, var(--vc-bg-light) 0%, rgba(248,250,253,.3) 40%, transparent 100%);
+  }
+}
+
+@media (min-width: 960px) {
+  .vc-hero {
+    display: grid;
+    grid-template-columns: 52% 48%;
+    align-items: stretch;
+  }
+}
