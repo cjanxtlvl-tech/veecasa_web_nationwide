@@ -407,11 +407,10 @@
     }
 
     /* =============================================
-       SHOWCASE  .vc-showcase — continuous marquee carousel
+       SHOWCASE  .vc-showcase — static pathway cards
     ============================================= */
     .vc-showcase {
-      padding: 2px 0 16px;
-      overflow: hidden;
+      padding: 8px 0 20px;
     }
     .vc-showcase__caption {
       text-align: center;
@@ -423,49 +422,18 @@
       margin-bottom: 6px;
       padding: 0 20px;
     }
-    .vc-showcase__mask {
-      position: relative;
-      overflow: hidden;
-    }
-    .vc-showcase__mask::before,
-    .vc-showcase__mask::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 60px;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .vc-showcase__mask::before {
-      left: 0;
-      background: linear-gradient(to right, var(--white), transparent);
-    }
-    .vc-showcase__mask::after {
-      right: 0;
-      background: linear-gradient(to left, var(--white), transparent);
-    }
-    .vc-showcase__track {
-      display: flex;
-      gap: 12px;
-      animation: vc-marquee 42s linear infinite;
-      will-change: transform;
-      width: max-content;
-      padding: 8px 0 16px;
-    }
-    .vc-showcase__track:hover      { animation-play-state: paused; }
-    .vc-showcase__track.is-touching { animation-play-state: paused; }
-    @keyframes vc-marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .vc-showcase__track { animation-play-state: paused; }
+    .vc-showcase__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 8px 20px 12px;
     }
 
     /* Property listing card */
-    .vc-card {
-      width: 130px;
-      flex-shrink: 0;
+    .vc-showcase .vc-card {
+      width: 100%;
       border-radius: var(--radius-md);
       background: var(--white);
       box-shadow: var(--shadow-md);
@@ -478,20 +446,20 @@
       transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
     }
-    .vc-card__img-wrap {
+    .vc-showcase .vc-card__img-wrap {
       position: relative;
       width: 100%;
-      height: 80px;
+      height: 140px;
       overflow: hidden;
       background: linear-gradient(135deg, #0B234A, #1F66FF); /* fallback if img missing */
     }
-    .vc-card__img {
+    .vc-showcase .vc-card__img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
-    .vc-card__badge {
+    .vc-showcase .vc-card__badge {
       position: absolute;
       top: 7px;
       left: 7px;
@@ -502,29 +470,24 @@
       padding: 3px 7px;
       border-radius: 20px;
     }
-    .vc-card__body { padding: 7px 8px 6px; }
-    .vc-card__title {
-      font-size: 11px;
+    .vc-showcase .vc-card__body { padding: 12px 14px 12px; }
+    .vc-showcase .vc-card__title {
+      font-size: 14px;
       font-weight: 700;
       color: var(--blue);
-      margin-bottom: 2px;
+      margin-bottom: 6px;
       line-height: 1.2;
     }
-    .vc-card__location {
-      font-size: 8px;
+    .vc-showcase .vc-card__desc {
+      font-size: 12px;
       color: var(--text-muted);
-      margin-bottom: 2px;
+      line-height: 1.5;
+      margin-bottom: 12px;
     }
-    .vc-card__desc {
-      font-size: 9px;
-      color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
-    .vc-card__arrow { display: flex; justify-content: flex-end; }
-    .vc-card__arrow span {
-      width: 22px;
-      height: 22px;
+    .vc-showcase .vc-card__arrow { display: flex; justify-content: flex-end; }
+    .vc-showcase .vc-card__arrow span {
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       border: 1.5px solid var(--blue);
       display: flex;
@@ -533,9 +496,18 @@
       color: var(--blue);
       transition: background var(--transition), color var(--transition);
     }
-    .vc-card:hover .vc-card__arrow span {
+    .vc-showcase .vc-card:hover .vc-card__arrow span {
       background: var(--blue);
       color: var(--white);
+    }
+
+    @media (max-width: 639px) {
+      .vc-showcase__grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+        padding: 8px 14px 12px;
+      }
+      .vc-showcase .vc-card__img-wrap { height: 150px; }
     }
 
     /* =============================================
@@ -975,205 +947,54 @@
 </section>
 
 <!-- ================================================
-     OPPORTUNITY SHOWCASE  .vc-showcase
-     Continuous marquee carousel — subtly supports mortgage-first messaging
+  OPPORTUNITY SHOWCASE  .vc-showcase
+  Static pathway cards (no carousel)
 ================================================= -->
 <section class="vc-showcase elementor-section" aria-labelledby="showcase-caption">
 
   <!-- Small muted caption — low visual emphasis intentional -->
   <p class="vc-showcase__caption" id="showcase-caption">Explore what's possible</p>
 
-  <!-- Edge-fade mask -->
-  <div class="vc-showcase__mask" aria-label="Opportunity carousel" role="region">
-    <!--
-      Track contains SET 1 + SET 2 (identical). CSS translateX(-50%) creates seamless loop.
-      property_*_upscaled.webp — adjust filenames below if yours differ.
-    -->
-    <div class="vc-showcase__track" id="vc-carousel-track">
+  <div class="vc-showcase__grid" aria-label="Opportunity pathways" role="region">
+    <article class="vc-card">
+      <div class="vc-card__img-wrap">
+        <img class="vc-card__img" src="images/property_1_1_upscaled.webp" alt="Warm family home exterior" loading="lazy"
+             onerror="this.style.display='none'"/>
+        <span class="vc-card__badge">Find a Home</span>
+      </div>
+      <div class="vc-card__body">
+        <div class="vc-card__title">Find a Home</div>
+        <div class="vc-card__desc">Explore homes, neighborhoods, and buyer resources.</div>
+        <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+      </div>
+    </article>
 
-      <!-- ============================================================
-           SET 1  (9 cards using property_*_upscaled.webp)
-           REPLACE filenames below if yours differ from property_X_Y_upscaled.webp
-      ============================================================= -->
+    <article class="vc-card">
+      <div class="vc-card__img-wrap">
+        <img class="vc-card__img" src="images/property_1_2_upscaled.webp" alt="Renovation and construction project" loading="lazy"
+             onerror="this.style.display='none'"/>
+        <span class="vc-card__badge">Fund a Project</span>
+      </div>
+      <div class="vc-card__body">
+        <div class="vc-card__title">Fund a Project</div>
+        <div class="vc-card__desc">Compare financing for renovations, construction, or fix &amp; flip deals.</div>
+        <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+      </div>
+    </article>
 
-      <!-- Card 1 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_1_1_upscaled.webp" alt="Single family home" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Single Family</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Explore Homes</div>
-          <div class="vc-card__location">Neighborhoods &amp; resources</div>
-          <div class="vc-card__desc">Buyer resources &amp; financing options.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 2 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_1_2_upscaled.webp" alt="Home renovation project" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Renovation</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Fund a Project</div>
-          <div class="vc-card__location">Construction &amp; Fix &amp; Flip</div>
-          <div class="vc-card__desc">Renovation or fix &amp; flip financing.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_1_3_upscaled.webp" alt="Investment property" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Investor</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Grow an Investment</div>
-          <div class="vc-card__location">DSCR &amp; hard money loans</div>
-          <div class="vc-card__desc">Rental property loan options.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 4 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_2_1_upscaled.webp" alt="Suburban neighborhood home" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Single Family</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Find Your Home</div>
-          <div class="vc-card__location">Suburban communities</div>
-          <div class="vc-card__desc">Compare purchase loan options.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 5 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_2_2_upscaled.webp" alt="Refinance your home" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Refinance</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Lower Your Rate</div>
-          <div class="vc-card__location">Rate &amp; term refinance</div>
-          <div class="vc-card__desc">300+ lenders competing for you.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 6 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_2_3_upscaled.webp" alt="Multifamily investment property" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Multifamily</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Invest &amp; Scale</div>
-          <div class="vc-card__location">2–4 unit &amp; apartment</div>
-          <div class="vc-card__desc">Investor-friendly loan programs.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 7 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_3_1_upscaled.webp" alt="New construction home" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Construction</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">New Build Loan</div>
-          <div class="vc-card__location">Ground-up construction</div>
-          <div class="vc-card__desc">Finance your build from day one.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 8 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_3_2_upscaled.webp" alt="Fix and flip property" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">Fix &amp; Flip</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Flip a Property</div>
-          <div class="vc-card__location">Short-term bridge loans</div>
-          <div class="vc-card__desc">Hard money &amp; bridge financing.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- Card 9 -->
-      <article class="vc-card">
-        <div class="vc-card__img-wrap">
-          <img class="vc-card__img" src="images/property_3_3_upscaled.webp" alt="Rental income property" loading="lazy"
-               onerror="this.style.display='none'"/>
-          <span class="vc-card__badge">DSCR Loan</span>
-        </div>
-        <div class="vc-card__body">
-          <div class="vc-card__title">Rental Income</div>
-          <div class="vc-card__location">Qualify on rent, not W-2</div>
-          <div class="vc-card__desc">DSCR loans for landlords &amp; investors.</div>
-          <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
-        </div>
-      </article>
-
-      <!-- ============================================================
-           SET 2  (exact duplicate for seamless loop — aria-hidden)
-      ============================================================= -->
-
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_1_1_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Single Family</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Explore Homes</div><div class="vc-card__location">Neighborhoods &amp; resources</div><div class="vc-card__desc">Buyer resources &amp; financing options.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_1_2_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Renovation</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Fund a Project</div><div class="vc-card__location">Construction &amp; Fix &amp; Flip</div><div class="vc-card__desc">Renovation or fix &amp; flip financing.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_1_3_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Investor</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Grow an Investment</div><div class="vc-card__location">DSCR &amp; hard money loans</div><div class="vc-card__desc">Rental property loan options.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_2_1_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Single Family</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Find Your Home</div><div class="vc-card__location">Suburban communities</div><div class="vc-card__desc">Compare purchase loan options.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_2_2_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Refinance</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Lower Your Rate</div><div class="vc-card__location">Rate &amp; term refinance</div><div class="vc-card__desc">300+ lenders competing for you.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_2_3_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Multifamily</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Invest &amp; Scale</div><div class="vc-card__location">2–4 unit &amp; apartment</div><div class="vc-card__desc">Investor-friendly loan programs.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_3_1_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Construction</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">New Build Loan</div><div class="vc-card__location">Ground-up construction</div><div class="vc-card__desc">Finance your build from day one.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_3_2_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">Fix &amp; Flip</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Flip a Property</div><div class="vc-card__location">Short-term bridge loans</div><div class="vc-card__desc">Hard money &amp; bridge financing.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-      <article class="vc-card" aria-hidden="true">
-        <div class="vc-card__img-wrap"><img class="vc-card__img" src="images/property_3_3_upscaled.webp" alt="" loading="lazy" onerror="this.style.display='none'"/><span class="vc-card__badge">DSCR Loan</span></div>
-        <div class="vc-card__body"><div class="vc-card__title">Rental Income</div><div class="vc-card__location">Qualify on rent, not W-2</div><div class="vc-card__desc">DSCR loans for landlords &amp; investors.</div><div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>
-      </article>
-
-    </div><!-- /.vc-showcase__track -->
-  </div><!-- /.vc-showcase__mask -->
+    <article class="vc-card">
+      <div class="vc-card__img-wrap">
+        <img class="vc-card__img" src="images/property_1_3_upscaled.webp" alt="Investment property exterior" loading="lazy"
+             onerror="this.style.display='none'"/>
+        <span class="vc-card__badge">Grow an Investment</span>
+      </div>
+      <div class="vc-card__body">
+        <div class="vc-card__title">Grow an Investment</div>
+        <div class="vc-card__desc">Discover DSCR, hard money, and investor loan options.</div>
+        <div class="vc-card__arrow"><span aria-hidden="true"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
+      </div>
+    </article>
+  </div>
 
 </section>
 
@@ -1257,27 +1078,6 @@
       const expanded = this.getAttribute('aria-expanded') === 'true';
       this.setAttribute('aria-expanded', String(!expanded));
     });
-  }
-
-  /* --------------------------------------------------
-     Carousel: pause on touch (mobile swipe-friendly)
-     CSS animation handles the movement; JS only pauses
-     it while the user's finger is down.
-  -------------------------------------------------- */
-  const carouselTrack = document.getElementById('vc-carousel-track');
-  if (carouselTrack) {
-    carouselTrack.addEventListener('touchstart', function () {
-      this.classList.add('is-touching');
-    }, { passive: true });
-    carouselTrack.addEventListener('touchend', function () {
-      this.classList.remove('is-touching');
-    }, { passive: true });
-
-    /* Respect prefers-reduced-motion */
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      carouselTrack.style.animationDuration = '0s';
-      carouselTrack.style.animationPlayState = 'paused';
-    }
   }
 
   /* --------------------------------------------------
