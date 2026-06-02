@@ -503,11 +503,19 @@
 
     @media (max-width: 639px) {
       .vc-showcase__grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 14px;
-        padding: 8px 14px 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        padding: 6px 10px 10px;
       }
-      .vc-showcase .vc-card__img-wrap { height: 150px; }
+      .vc-showcase .vc-card__img-wrap { height: 90px; }
+      .vc-showcase .vc-card__body { padding: 8px 8px 8px; }
+      .vc-showcase .vc-card__title { font-size: 11px; margin-bottom: 4px; }
+      .vc-showcase .vc-card__desc {
+        font-size: 9px;
+        line-height: 1.35;
+        margin-bottom: 8px;
+      }
+      .vc-showcase .vc-card__arrow span { width: 20px; height: 20px; }
     }
 
     /* =============================================
